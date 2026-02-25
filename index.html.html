@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MPL Community Draft</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    color: white;
+    overflow: hidden;
+}
+
+h1 {
+    text-align: center;
+    margin: 15px 0;
+    letter-spacing: 3px;
+}
+
+.main {
+    display: flex;
+    height: 85vh;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.team {
+    width: 28%;
+    background: #111827;
+    border-radius: 14px;
+    padding: 15px;
+    min-height: 420px;
+    transition: 0.3s;
+}
+
+.team.activeA { box-shadow: 0 0 20px #ef4444; }
+.team.activeB { box-shadow: 0 0 20px #3b82f6; }
+
+.team h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.teamA h2 { color: #ef4444; }
+.teamB h2 { color: #3b82f6; }
+
+.player {
+    background: #1f2937;
+    padding: 8px;
+    margin: 6px 0;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.captain {
+    border: 1px solid gold;
+    color: gold;
+}
+
+.pool {
+    width: 30%;
+    text-align: center;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+
+.card {
+    width: 90px;
+    height: 130px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.card-inner {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(.17,.67,.83,.67);
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.card.flip .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.card-front {
+    background: #1f2937;
+    font-size: 24px;
+}
+
+.card-back {
+    background: #2563eb;
+    transform: rotateY(180deg);
+}
+
+.turn {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 10px;
+    letter-spacing: 2px;
+}
+
+.timer {
+    font-size: 28px;
+    margin-top: 5px;
+}
+
+input {
+    margin: 4px;
+    padding: 6px;
+    border-radius: 6px;
+    border: none;
+}
+
+button {
+    padding: 8px 14px;
+    margin: 8px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: #2563eb;
+    color: white;
+}
+
+#inputSection {
+    text-align: center;
+    margin-top: 40px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>MPL COMMUNITY DRAFT</h1>
+
+<div id="inputSection">
+    <p>Masukkan 10 Nama</p>
+    <div id="inputs"></div>
+    <button onclick="startDraft()">START TOURNAMENT DRAFT</button>
+</div>
+
+<div id="draftSection" style="display:none;">
+    <div class="turn" id="turnInfo"></div>
+    <div class="timer" id="timer"></div>
+
+    <div class="main">
+
+        <div class="team teamA" id="teamABox">
+            <h2>TEAM A</h2>
+            <div id="teamA"></div>
+        </div>
+
+        <div class="pool">
+            <h2>BLIND POOL</h2>
+            <div class="cards" id="cardContainer"></div>
+        </div>
+
+        <div class="team teamB" id="teamBBox">
+            <h2>TEAM B</h2>
+            <div id="teamB"></div>
+        </div>
+
+    </div>
+
+    <div style="text-align:center;">
+        <button onclick="resetDraft()">RESET</button>
+    </div>
+</div>
+
+<script>
+let players = [];
+let captains = [];
+let pool = [];
+let teamA = [];
+let teamB = [];
+let pickOrder = ["A","B","B","A","A","B","B","A"];
+let pickIndex = 0;
+let timerInterval;
+let timeLeft = 15;
+
+const flipSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-card-flip-1938.mp3");
+const tickSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-clock-countdown-bleeps-916.mp3");
+
+function generateInputs() {
+    const container = document.getElementById("inputs");
+    for (let i = 0; i < 10; i++) {
+        container.innerHTML += `<input type="text" id="p${i}" placeholder="Player ${i+1}"><br>`;
+    }
+}
+generateInputs();
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function startDraft() {
+    players = [];
+    for (let i = 0; i < 10; i++) {
+        let val = document.getElementById("p"+i).value;
+        if (!val) return alert("Isi semua nama dulu.");
+        players.push(val);
+    }
+
+    shuffle(players);
+
+    captains = [players[0], players[1]];
+    teamA = [captains[0]];
+    teamB = [captains[1]];
+    pool = players.slice(2);
+
+    document.getElementById("inputSection").style.display = "none";
+    document.getElementById("draftSection").style.display = "block";
+
+    render();
+    startTimer();
+}
+
+function render() {
+    document.getElementById("teamA").innerHTML =
+        teamA.map(p => `<div class="player ${captains.includes(p)?'captain':''}">${p}</div>`).join("");
+
+    document.getElementById("teamB").innerHTML =
+        teamB.map(p => `<div class="player ${captains.includes(p)?'captain':''}">${p}</div>`).join("");
+
+    document.getElementById("teamABox").classList.remove("activeA");
+    document.getElementById("teamBBox").classList.remove("activeB");
+
+    if (pickIndex < pickOrder.length) {
+        let turn = pickOrder[pickIndex];
+        document.getElementById("turnInfo").innerText = "GILIRAN CAPTAIN TEAM " + turn;
+        if (turn === "A") document.getElementById("teamABox").classList.add("activeA");
+        else document.getElementById("teamBBox").classList.add("activeB");
+    } else {
+        document.getElementById("turnInfo").innerText = "DRAFT COMPLETE";
+        document.getElementById("timer").innerText = "";
+        clearInterval(timerInterval);
+        return;
+    }
+
+    const container = document.getElementById("cardContainer");
+    container.innerHTML = "";
+
+    pool.forEach(player => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+            <div class="card-inner">
+                <div class="card-front">?</div>
+                <div class="card-back">${player}</div>
+            </div>
+        `;
+        card.onclick = () => flipCard(card, player);
+        container.appendChild(card);
+    });
+}
+
+function flipCard(card, player) {
+    if (pickIndex >= pickOrder.length) return;
+
+    flipSound.play();
+    card.classList.add("flip");
+
+    setTimeout(() => {
+        if (pickOrder[pickIndex] === "A") teamA.push(player);
+        else teamB.push(player);
+
+        pool = pool.filter(p => p !== player);
+        pickIndex++;
+        resetTimer();
+        render();
+    }, 600);
+}
+
+function startTimer() {
+    timeLeft = 15;
+    document.getElementById("timer").innerText = timeLeft;
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = timeLeft;
+        tickSound.play();
+        if (timeLeft <= 0) {
+            autoPick();
+        }
+    }, 1000);
+}
+
+function resetTimer() {
+    clearInterval(timerInterval);
+    startTimer();
+}
+
+function autoPick() {
+    clearInterval(timerInterval);
+    if (pool.length > 0) {
+        let randomPlayer = pool[Math.floor(Math.random()*pool.length)];
+        if (pickOrder[pickIndex] === "A") teamA.push(randomPlayer);
+        else teamB.push(randomPlayer);
+        pool = pool.filter(p => p !== randomPlayer);
+        pickIndex++;
+        render();
+        startTimer();
+    }
+}
+
+function resetDraft() {
+    location.reload();
+}
+</script>
+
+</body>
+</html>
