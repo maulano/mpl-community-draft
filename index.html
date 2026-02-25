@@ -13,7 +13,7 @@ body {
     overflow: hidden;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .broadcast-header {
     background: #0b1220;
     padding: 10px 20px;
@@ -37,7 +37,7 @@ body {
     width: 60px;
 }
 
-/* ===== SCOREBOARD ===== */
+/* SCOREBOARD */
 .scoreboard {
     display: flex;
     justify-content: center;
@@ -57,17 +57,10 @@ body {
     font-weight: bold;
 }
 
-.score button {
-    padding: 5px 10px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-}
-
-/* ===== MAIN ===== */
+/* MAIN */
 .main {
     display: flex;
-    height: 75vh;
+    height: 70vh;
     justify-content: space-around;
     align-items: center;
 }
@@ -105,6 +98,7 @@ body {
     color: gold;
 }
 
+/* POOL */
 .pool {
     width: 30%;
     text-align: center;
@@ -166,26 +160,20 @@ body {
 }
 
 .timer {
-    font-size: 28px;
+    font-size: 32px;
     margin-top: 5px;
 }
 
-button {
-    padding: 8px 14px;
-    margin: 8px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    background: #2563eb;
-    color: white;
+/* RESET BUTTON */
+.reset-area {
+    text-align: center;
+    margin-top: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ===== HEADER ===== -->
 <div class="broadcast-header">
     <div class="event-title">
         MANGO CUP RAMADHAN SEASON 2
@@ -198,70 +186,42 @@ button {
     </div>
 </div>
 
-<!-- ===== SCOREBOARD ===== -->
 <div class="scoreboard">
     <div class="team-name" style="color:#ef4444;">MANGO A</div>
-
-    <div class="score">
-        <button onclick="addScore('A')">+</button>
-        <span id="scoreA">0</span>
-    </div>
-
+    <div class="score"><span id="scoreA">0</span></div>
     -
-
-    <div class="score">
-        <span id="scoreB">0</span>
-        <button onclick="addScore('B')">+</button>
-    </div>
-
+    <div class="score"><span id="scoreB">0</span></div>
     <div class="team-name" style="color:#3b82f6;">MANGO B</div>
 </div>
 
-<div id="draftSection">
-    <div class="turn" id="turnInfo"></div>
-    <div class="timer" id="timer"></div>
+<div class="turn" id="turnInfo"></div>
+<div class="timer" id="timer"></div>
 
-    <div class="main">
+<div class="main">
 
-        <div class="team teamA" id="teamABox">
-            <h2>MANGO A</h2>
-            <div id="teamA"></div>
-        </div>
-
-        <div class="pool">
-            <h2>BLIND POOL</h2>
-            <div class="cards" id="cardContainer"></div>
-        </div>
-
-        <div class="team teamB" id="teamBBox">
-            <h2>MANGO B</h2>
-            <div id="teamB"></div>
-        </div>
-
+    <div class="team teamA" id="teamABox">
+        <h2>MANGO A</h2>
+        <div id="teamA"></div>
     </div>
 
-    <div style="text-align:center;">
-        <button onclick="resetDraft()">RESET DRAFT</button>
+    <div class="pool">
+        <h2>BLIND POOL</h2>
+        <div class="cards" id="cardContainer"></div>
     </div>
+
+    <div class="team teamB" id="teamBBox">
+        <h2>MANGO B</h2>
+        <div id="teamB"></div>
+    </div>
+
+</div>
+
+<div class="reset-area">
+    <button onclick="resetDraft()">RESET DRAFT</button>
 </div>
 
 <script>
-let scoreA = 0;
-let scoreB = 0;
-
-function addScore(team){
-    if(team === 'A'){
-        scoreA++;
-        document.getElementById("scoreA").innerText = scoreA;
-    } else {
-        scoreB++;
-        document.getElementById("scoreB").innerText = scoreB;
-    }
-}
-
-/* ===== DRAFT ENGINE ===== */
-
-let players = ["P1","P2","P3","P4","P5","P6","P7","P8","P9","P10"];
+let players = ["Ilham","Ifdal","Avi","Abdu","Rafsul","Rehan","Adit","Farug","Torig","Ricat"];
 let captains = [];
 let pool = [];
 let teamA = [];
@@ -269,7 +229,7 @@ let teamB = [];
 let pickOrder = ["A","B","B","A","A","B","B","A"];
 let pickIndex = 0;
 let timerInterval;
-let timeLeft = 15;
+let timeLeft = 45;
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -278,12 +238,14 @@ function shuffle(array) {
     }
 }
 
-function startDraftAuto() {
+function startDraft() {
     shuffle(players);
+
     captains = [players[0], players[1]];
     teamA = [captains[0]];
     teamB = [captains[1]];
     pool = players.slice(2);
+
     render();
     startTimer();
 }
@@ -295,14 +257,9 @@ function render() {
     document.getElementById("teamB").innerHTML =
         teamB.map(p => `<div class="player ${captains.includes(p)?'captain':''}">${p}</div>`).join("");
 
-    document.getElementById("teamABox").classList.remove("activeA");
-    document.getElementById("teamBBox").classList.remove("activeB");
-
     if (pickIndex < pickOrder.length) {
         let turn = pickOrder[pickIndex];
-        document.getElementById("turnInfo").innerText = "TURN: TEAM " + turn;
-        if (turn === "A") document.getElementById("teamABox").classList.add("activeA");
-        else document.getElementById("teamBBox").classList.add("activeB");
+        document.getElementById("turnInfo").innerText = "TURN: CAPTAIN TEAM " + turn;
     } else {
         document.getElementById("turnInfo").innerText = "DRAFT COMPLETE";
         clearInterval(timerInterval);
@@ -328,25 +285,33 @@ function render() {
 
 function flipCard(card, player) {
     if (pickIndex >= pickOrder.length) return;
+
     card.classList.add("flip");
 
     setTimeout(() => {
         if (pickOrder[pickIndex] === "A") teamA.push(player);
         else teamB.push(player);
+
         pool = pool.filter(p => p !== player);
         pickIndex++;
+        resetTimer();
         render();
     }, 600);
 }
 
 function startTimer() {
-    timeLeft = 15;
+    timeLeft = 45;
     document.getElementById("timer").innerText = timeLeft;
     timerInterval = setInterval(() => {
         timeLeft--;
         document.getElementById("timer").innerText = timeLeft;
         if (timeLeft <= 0) autoPick();
     }, 1000);
+}
+
+function resetTimer() {
+    clearInterval(timerInterval);
+    startTimer();
 }
 
 function autoPick() {
@@ -366,7 +331,7 @@ function resetDraft() {
     location.reload();
 }
 
-startDraftAuto();
+startDraft();
 </script>
 
 </body>
