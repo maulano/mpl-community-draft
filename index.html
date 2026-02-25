@@ -13,8 +13,8 @@ body {
     overflow: hidden;
 }
 
-/* ===== CINEMATIC INTRO ===== */
-#introScreen {
+/* ===== CINEMATIC SCREEN ===== */
+#cinematic {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -23,58 +23,21 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 9999;
-}
-
-.intro-content {
+    flex-direction: column;
+    font-size: 40px;
     text-align: center;
-    animation: fadeIn 2s ease forwards;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* HEADER */
+/* ===== HEADER ===== */
 .broadcast-header {
     background: #0b1220;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
     border-bottom: 1px solid #1f2937;
 }
 
-.match-info input {
-    background: #1f2937;
-    border: none;
-    color: white;
-    text-align: center;
-    border-radius: 4px;
-    width: 60px;
-}
-
-/* SCOREBOARD */
-.scoreboard {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 25px;
-    padding: 10px;
-    font-size: 18px;
-    background: #111827;
-}
-
-.team-name {
-    font-weight: bold;
-}
-
-.score {
-    font-size: 22px;
-    font-weight: bold;
-}
-
-/* MAIN */
+/* ===== MAIN ===== */
 .main {
     display: flex;
     height: 70vh;
@@ -88,15 +51,6 @@ body {
     border-radius: 14px;
     padding: 15px;
     min-height: 420px;
-    transition: 0.3s;
-}
-
-.team.activeA { box-shadow: 0 0 20px #ef4444; }
-.team.activeB { box-shadow: 0 0 20px #3b82f6; }
-
-.team h2 {
-    text-align: center;
-    margin-bottom: 10px;
 }
 
 .teamA h2 { color: #ef4444; }
@@ -111,16 +65,11 @@ body {
 }
 
 .captain {
-    border: 1px solid gold;
+    border: 2px solid gold;
     color: gold;
 }
 
-/* POOL */
-.pool {
-    width: 30%;
-    text-align: center;
-}
-
+/* ===== CARD ===== */
 .cards {
     display: flex;
     flex-wrap: wrap;
@@ -129,16 +78,22 @@ body {
 }
 
 .card {
-    width: 95px;
-    height: 140px;
+    width: 100px;
+    height: 150px;
     perspective: 1000px;
     cursor: pointer;
+    transition: 0.4s;
+}
+
+.card.zoom {
+    transform: scale(1.6);
+    z-index: 500;
 }
 
 .card-inner {
     width: 100%;
     height: 100%;
-    transition: transform 0.6s cubic-bezier(.17,.67,.83,.67);
+    transition: transform 0.6s;
     transform-style: preserve-3d;
     position: relative;
 }
@@ -156,12 +111,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: bold;
 }
 
 .card-front {
     background: #1f2937;
-    font-size: 26px;
+    font-size: 28px;
 }
 
 .card-back {
@@ -177,82 +131,44 @@ body {
     border-radius: 10px 10px 0 0;
 }
 
-.turn {
-    text-align: center;
-    font-size: 18px;
-    margin-top: 10px;
-    letter-spacing: 2px;
-}
-
 .timer {
-    font-size: 32px;
-    margin-top: 5px;
-}
-
-.reset-area {
     text-align: center;
-    margin-top: 10px;
+    font-size: 28px;
+    margin: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- INTRO -->
-<div id="introScreen">
-    <div class="intro-content">
-        <h1>MANGO CUP</h1>
-        <h2>RAMADHAN SEASON 2</h2>
-    </div>
-</div>
+<div id="cinematic"></div>
 
 <div class="broadcast-header">
     <div>MANGO CUP RAMADHAN SEASON 2</div>
-    <div class="match-info">
-        MATCH <input type="number" value="13">
-        — BO3 — GAME <input type="number" value="1">
-    </div>
+    <div>MANGO A vs MANGO B</div>
 </div>
 
-<div class="scoreboard">
-    <div class="team-name" style="color:#ef4444;">MANGO A</div>
-    <div class="score"><span id="scoreA">0</span></div>
-    -
-    <div class="score"><span id="scoreB">0</span></div>
-    <div class="team-name" style="color:#3b82f6;">MANGO B</div>
-</div>
-
-<div class="turn" id="turnInfo"></div>
 <div class="timer" id="timer"></div>
 
 <div class="main">
 
-    <div class="team teamA" id="teamABox">
+    <div class="team teamA">
         <h2>MANGO A</h2>
         <div id="teamA"></div>
     </div>
 
-    <div class="pool">
-        <h2>BLIND POOL</h2>
+    <div>
         <div class="cards" id="cardContainer"></div>
     </div>
 
-    <div class="team teamB" id="teamBBox">
+    <div class="team teamB">
         <h2>MANGO B</h2>
         <div id="teamB"></div>
     </div>
 
 </div>
 
-<div class="reset-area">
-    <button onclick="resetDraft()">RESET DRAFT</button>
-</div>
-
 <script>
-setTimeout(() => {
-    document.getElementById("introScreen").style.display = "none";
-}, 4000);
-
 let players = ["Ilham","Ifdal","Avi","Abdu","Rafsul","Rehan","Adit","Farug","Torig","Ricat"];
 let captains = [];
 let pool = [];
@@ -260,8 +176,9 @@ let teamA = [];
 let teamB = [];
 let pickOrder = ["A","B","B","A","A","B","B","A"];
 let pickIndex = 0;
-let timerInterval;
 let timeLeft = 45;
+let timerInterval;
+let revealedCard = null;
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -270,14 +187,36 @@ function shuffle(array) {
     }
 }
 
-function startDraft() {
+function showCinematic(text, callback) {
+    const screen = document.getElementById("cinematic");
+    screen.innerHTML = text;
+    screen.style.display = "flex";
+    setTimeout(() => {
+        screen.style.display = "none";
+        if(callback) callback();
+    }, 2500);
+}
+
+function startSequence() {
     shuffle(players);
 
     captains = [players[0], players[1]];
+
+    showCinematic("MANGO A CAPTAIN", () => {
+        showCinematic(captains[0], () => {
+            showCinematic("MANGO B CAPTAIN", () => {
+                showCinematic(captains[1], () => {
+                    startDraft();
+                });
+            });
+        });
+    });
+}
+
+function startDraft() {
     teamA = [captains[0]];
     teamB = [captains[1]];
     pool = players.slice(2);
-
     render();
     startTimer();
 }
@@ -288,15 +227,6 @@ function render() {
 
     document.getElementById("teamB").innerHTML =
         teamB.map(p => `<div class="player ${captains.includes(p)?'captain':''}">${p}</div>`).join("");
-
-    if (pickIndex < pickOrder.length) {
-        let turn = pickOrder[pickIndex];
-        document.getElementById("turnInfo").innerText = "TURN: CAPTAIN TEAM " + turn;
-    } else {
-        document.getElementById("turnInfo").innerText = "DRAFT COMPLETE";
-        clearInterval(timerInterval);
-        return;
-    }
 
     const container = document.getElementById("cardContainer");
     container.innerHTML = "";
@@ -309,29 +239,33 @@ function render() {
                 <div class="card-front">?</div>
                 <div class="card-back">
                     <img src="${player.toLowerCase()}.jpg">
-                    <div style="font-size:12px; padding:2px;">${player}</div>
+                    <div style="font-size:12px">${player}</div>
                 </div>
             </div>
         `;
-        card.onclick = () => flipCard(card, player);
+        card.onclick = () => handleCardClick(card, player);
         container.appendChild(card);
     });
 }
 
-function flipCard(card, player) {
-    if (pickIndex >= pickOrder.length) return;
+function handleCardClick(card, player) {
+    if (!card.classList.contains("flip")) {
+        card.classList.add("flip");
+        card.classList.add("zoom");
+        revealedCard = {card, player};
+    } else {
+        card.classList.remove("zoom");
 
-    card.classList.add("flip");
+        setTimeout(() => {
+            if (pickOrder[pickIndex] === "A") teamA.push(player);
+            else teamB.push(player);
 
-    setTimeout(() => {
-        if (pickOrder[pickIndex] === "A") teamA.push(player);
-        else teamB.push(player);
-
-        pool = pool.filter(p => p !== player);
-        pickIndex++;
-        resetTimer();
-        render();
-    }, 600);
+            pool = pool.filter(p => p !== player);
+            pickIndex++;
+            revealedCard = null;
+            render();
+        }, 600);
+    }
 }
 
 function startTimer() {
@@ -340,33 +274,11 @@ function startTimer() {
     timerInterval = setInterval(() => {
         timeLeft--;
         document.getElementById("timer").innerText = timeLeft;
-        if (timeLeft <= 0) autoPick();
+        if (timeLeft <= 0) clearInterval(timerInterval);
     }, 1000);
 }
 
-function resetTimer() {
-    clearInterval(timerInterval);
-    startTimer();
-}
-
-function autoPick() {
-    clearInterval(timerInterval);
-    if (pool.length > 0) {
-        let randomPlayer = pool[Math.floor(Math.random()*pool.length)];
-        if (pickOrder[pickIndex] === "A") teamA.push(randomPlayer);
-        else teamB.push(randomPlayer);
-        pool = pool.filter(p => p !== randomPlayer);
-        pickIndex++;
-        render();
-        startTimer();
-    }
-}
-
-function resetDraft() {
-    location.reload();
-}
-
-startDraft();
+startSequence();
 </script>
 
 </body>
