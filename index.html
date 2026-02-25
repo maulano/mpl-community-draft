@@ -5,280 +5,340 @@
 <title>Mango Cup Ramadhan Season 2</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: radial-gradient(circle at top, #0f172a, #020617);
-    color: white;
-    overflow: hidden;
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:radial-gradient(circle at top,#0f172a,#020617);
+    color:white;
+    overflow:hidden;
 }
 
-/* ===== CINEMATIC SCREEN ===== */
-#cinematic {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    flex-direction: column;
-    font-size: 40px;
-    text-align: center;
+/* ===== INTRO ===== */
+#intro{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:9999;
+    animation:fadeIn 2s forwards;
+}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+
+#intro button{
+    margin-top:20px;
+    padding:10px 20px;
+    background:#2563eb;
+    border:none;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
 }
 
 /* ===== HEADER ===== */
-.broadcast-header {
-    background: #0b1220;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #1f2937;
+.broadcast-header{
+    background:#0b1220;
+    padding:10px 20px;
+    display:flex;
+    justify-content:space-between;
+    border-bottom:1px solid #1f2937;
+}
+
+.match-info input{
+    background:#1f2937;
+    border:none;
+    color:white;
+    width:60px;
+    text-align:center;
+    border-radius:4px;
+}
+
+/* ===== SCOREBOARD ===== */
+.scoreboard{
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    padding:8px;
+    background:#111827;
+}
+
+.score button{
+    background:#2563eb;
+    border:none;
+    color:white;
+    border-radius:6px;
+    padding:4px 8px;
+    cursor:pointer;
 }
 
 /* ===== MAIN ===== */
-.main {
-    display: flex;
-    height: 70vh;
-    justify-content: space-around;
-    align-items: center;
+.main{
+    display:flex;
+    height:65vh;
+    justify-content:space-around;
+    align-items:center;
 }
 
-.team {
-    width: 28%;
-    background: #111827;
-    border-radius: 14px;
-    padding: 15px;
-    min-height: 420px;
+.team{
+    width:28%;
+    background:#111827;
+    border-radius:14px;
+    padding:15px;
+    min-height:420px;
 }
 
-.teamA h2 { color: #ef4444; }
-.teamB h2 { color: #3b82f6; }
+.teamA h2{color:#ef4444}
+.teamB h2{color:#3b82f6}
 
-.player {
-    background: #1f2937;
-    padding: 8px;
-    margin: 6px 0;
-    border-radius: 8px;
-    text-align: center;
+.player{
+    background:#1f2937;
+    padding:8px;
+    margin:6px 0;
+    border-radius:8px;
+    text-align:center;
 }
 
-.captain {
-    border: 2px solid gold;
-    color: gold;
+.captain{
+    border:2px solid gold;
+    color:gold;
 }
 
-/* ===== CARD ===== */
-.cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
+/* ===== CARDS ===== */
+.cards{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:12px;
 }
 
-.card {
-    width: 100px;
-    height: 150px;
-    perspective: 1000px;
-    cursor: pointer;
-    transition: 0.4s;
+.card{
+    width:100px;
+    height:150px;
+    perspective:1000px;
+    cursor:pointer;
+    transition:.4s;
 }
 
-.card.zoom {
-    transform: scale(1.6);
-    z-index: 500;
+.card.zoom{
+    transform:scale(1.6);
+    z-index:500;
 }
 
-.card-inner {
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-    position: relative;
+.card-inner{
+    width:100%;
+    height:100%;
+    transition:transform .6s;
+    transform-style:preserve-3d;
+    position:relative;
 }
 
-.card.flip .card-inner {
-    transform: rotateY(180deg);
+.card.flip .card-inner{
+    transform:rotateY(180deg);
 }
 
-.card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    backface-visibility: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.card-front,.card-back{
+    position:absolute;
+    width:100%;
+    height:100%;
+    border-radius:10px;
+    backface-visibility:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
-.card-front {
-    background: #1f2937;
-    font-size: 28px;
+.card-front{background:#1f2937;font-size:28px}
+.card-back{
+    background:#2563eb;
+    transform:rotateY(180deg);
+    flex-direction:column;
 }
 
-.card-back {
-    background: #2563eb;
-    transform: rotateY(180deg);
-    flex-direction: column;
+.card-back img{
+    width:100%;
+    height:85%;
+    object-fit:cover;
+    border-radius:10px 10px 0 0;
 }
 
-.card-back img {
-    width: 100%;
-    height: 85%;
-    object-fit: cover;
-    border-radius: 10px 10px 0 0;
-}
-
-.timer {
-    text-align: center;
-    font-size: 28px;
-    margin: 10px;
+.timer{
+    text-align:center;
+    font-size:28px;
+    margin-top:8px;
 }
 </style>
 </head>
 
 <body>
 
-<div id="cinematic"></div>
+<!-- INTRO -->
+<div id="intro">
+    <h1>MANGO CUP</h1>
+    <h2>RAMADHAN SEASON 2</h2>
+    <button onclick="startCaptainReveal()">START DRAFT</button>
+</div>
 
 <div class="broadcast-header">
     <div>MANGO CUP RAMADHAN SEASON 2</div>
-    <div>MANGO A vs MANGO B</div>
+    <div class="match-info">
+        MATCH <input type="number" value="13">
+        — BO3 — GAME <input type="number" value="1">
+    </div>
+</div>
+
+<div class="scoreboard">
+    <div style="color:#ef4444;">MANGO A</div>
+    <div class="score">
+        <button onclick="scoreA++ ; document.getElementById('scoreA').innerText=scoreA">+</button>
+        <span id="scoreA">0</span>
+    </div>
+    -
+    <div class="score">
+        <span id="scoreB">0</span>
+        <button onclick="scoreB++ ; document.getElementById('scoreB').innerText=scoreB">+</button>
+    </div>
+    <div style="color:#3b82f6;">MANGO B</div>
 </div>
 
 <div class="timer" id="timer"></div>
 
 <div class="main">
 
-    <div class="team teamA">
-        <h2>MANGO A</h2>
-        <div id="teamA"></div>
-    </div>
+<div class="team teamA">
+<h2>MANGO A</h2>
+<div id="teamA"></div>
+</div>
 
-    <div>
-        <div class="cards" id="cardContainer"></div>
-    </div>
+<div>
+<div class="cards" id="cardContainer"></div>
+</div>
 
-    <div class="team teamB">
-        <h2>MANGO B</h2>
-        <div id="teamB"></div>
-    </div>
+<div class="team teamB">
+<h2>MANGO B</h2>
+<div id="teamB"></div>
+</div>
 
 </div>
 
 <script>
-let players = ["Ilham","Ifdal","Avi","Abdu","Rafsul","Rehan","Adit","Farug","Torig","Ricat"];
-let captains = [];
-let pool = [];
-let teamA = [];
-let teamB = [];
-let pickOrder = ["A","B","B","A","A","B","B","A"];
-let pickIndex = 0;
-let timeLeft = 45;
+let scoreA=0, scoreB=0;
+
+let players=["Ilham","Ifdal","Avi","Abdu","Rafsul","Rehan","Adit","Farug","Torig","Ricat"];
+let captains=[];
+let pool=[];
+let teamA=[], teamB=[];
+let pickOrder=["A","B","B","A","A","B","B","A"];
+let pickIndex=0;
+let timeLeft=45;
 let timerInterval;
-let revealedCard = null;
 
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
+function shuffle(a){
+for(let i=a.length-1;i>0;i--){
+const j=Math.floor(Math.random()*(i+1));
+[a[i],a[j]]=[a[j],a[i]];
+}}
+
+function startCaptainReveal(){
+document.getElementById("intro").style.animation="fadeOut 1.5s forwards";
+setTimeout(()=>{
+document.getElementById("intro").style.display="none";
+shuffle(players);
+captains=[players[0],players[1]];
+showCaptain("MANGO A CAPTAIN",captains[0],()=>{
+showCaptain("MANGO B CAPTAIN",captains[1],startDraft);
+});
+},1500);
 }
 
-function showCinematic(text, callback) {
-    const screen = document.getElementById("cinematic");
-    screen.innerHTML = text;
-    screen.style.display = "flex";
-    setTimeout(() => {
-        screen.style.display = "none";
-        if(callback) callback();
-    }, 2500);
+function showCaptain(title,name,callback){
+const overlay=document.createElement("div");
+overlay.style.position="fixed";
+overlay.style.width="100%";
+overlay.style.height="100%";
+overlay.style.background="black";
+overlay.style.display="flex";
+overlay.style.flexDirection="column";
+overlay.style.justifyContent="center";
+overlay.style.alignItems="center";
+overlay.style.zIndex="9999";
+overlay.innerHTML=`<h1>${title}</h1>
+<img src="${name.toLowerCase()}.jpg" style="width:200px;border-radius:12px;margin:20px;">
+<h2>${name}</h2>`;
+document.body.appendChild(overlay);
+setTimeout(()=>{
+overlay.remove();
+callback();
+},3500);
 }
 
-function startSequence() {
-    shuffle(players);
-
-    captains = [players[0], players[1]];
-
-    showCinematic("MANGO A CAPTAIN", () => {
-        showCinematic(captains[0], () => {
-            showCinematic("MANGO B CAPTAIN", () => {
-                showCinematic(captains[1], () => {
-                    startDraft();
-                });
-            });
-        });
-    });
+function startDraft(){
+teamA=[captains[0]];
+teamB=[captains[1]];
+pool=players.slice(2);
+render();
+startTimer();
 }
 
-function startDraft() {
-    teamA = [captains[0]];
-    teamB = [captains[1]];
-    pool = players.slice(2);
-    render();
-    startTimer();
+function render(){
+document.getElementById("teamA").innerHTML=
+teamA.map(p=>`<div class="player ${captains.includes(p)?'captain':''}">${p}</div>`).join("");
+
+document.getElementById("teamB").innerHTML=
+teamB.map(p=>`<div class="player ${captains.includes(p)?'captain':''}">${p}</div>`).join("");
+
+const container=document.getElementById("cardContainer");
+container.innerHTML="";
+
+pool.forEach(player=>{
+const card=document.createElement("div");
+card.className="card";
+card.innerHTML=`
+<div class="card-inner">
+<div class="card-front">?</div>
+<div class="card-back">
+<img src="${player.toLowerCase()}.jpg">
+<div style="font-size:12px">${player}</div>
+</div>
+</div>`;
+card.onclick=()=>handleCard(card,player);
+container.appendChild(card);
+});
 }
 
-function render() {
-    document.getElementById("teamA").innerHTML =
-        teamA.map(p => `<div class="player ${captains.includes(p)?'captain':''}">${p}</div>`).join("");
-
-    document.getElementById("teamB").innerHTML =
-        teamB.map(p => `<div class="player ${captains.includes(p)?'captain':''}">${p}</div>`).join("");
-
-    const container = document.getElementById("cardContainer");
-    container.innerHTML = "";
-
-    pool.forEach(player => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-            <div class="card-inner">
-                <div class="card-front">?</div>
-                <div class="card-back">
-                    <img src="${player.toLowerCase()}.jpg">
-                    <div style="font-size:12px">${player}</div>
-                </div>
-            </div>
-        `;
-        card.onclick = () => handleCardClick(card, player);
-        container.appendChild(card);
-    });
+function handleCard(card,player){
+if(!card.classList.contains("flip")){
+card.classList.add("flip");
+card.classList.add("zoom");
+}else{
+card.classList.remove("zoom");
+setTimeout(()=>{
+if(pickOrder[pickIndex]==="A") teamA.push(player);
+else teamB.push(player);
+pool=pool.filter(p=>p!==player);
+pickIndex++;
+render();
+startTimer();
+},600);
+}
 }
 
-function handleCardClick(card, player) {
-    if (!card.classList.contains("flip")) {
-        card.classList.add("flip");
-        card.classList.add("zoom");
-        revealedCard = {card, player};
-    } else {
-        card.classList.remove("zoom");
-
-        setTimeout(() => {
-            if (pickOrder[pickIndex] === "A") teamA.push(player);
-            else teamB.push(player);
-
-            pool = pool.filter(p => p !== player);
-            pickIndex++;
-            revealedCard = null;
-            render();
-        }, 600);
-    }
+function startTimer(){
+clearInterval(timerInterval);
+timeLeft=45;
+document.getElementById("timer").innerText=timeLeft;
+timerInterval=setInterval(()=>{
+timeLeft--;
+document.getElementById("timer").innerText=timeLeft;
+if(timeLeft<=0){
+clearInterval(timerInterval);
 }
-
-function startTimer() {
-    timeLeft = 45;
-    document.getElementById("timer").innerText = timeLeft;
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        document.getElementById("timer").innerText = timeLeft;
-        if (timeLeft <= 0) clearInterval(timerInterval);
-    }, 1000);
+},1000);
 }
-
-startSequence();
 </script>
 
 </body>
