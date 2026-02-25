@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>MPL Community Draft</title>
+<title>Mango Cup Ramadhan Season 2</title>
 
 <style>
 body {
@@ -13,15 +13,61 @@ body {
     overflow: hidden;
 }
 
-h1 {
-    text-align: center;
-    margin: 15px 0;
-    letter-spacing: 3px;
+/* ===== HEADER ===== */
+.broadcast-header {
+    background: #0b1220;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #1f2937;
 }
 
+.event-title {
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.match-info input {
+    background: #1f2937;
+    border: none;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    width: 60px;
+}
+
+/* ===== SCOREBOARD ===== */
+.scoreboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    padding: 10px;
+    font-size: 18px;
+    background: #111827;
+}
+
+.team-name {
+    font-weight: bold;
+}
+
+.score {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.score button {
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+/* ===== MAIN ===== */
 .main {
     display: flex;
-    height: 85vh;
+    height: 75vh;
     justify-content: space-around;
     align-items: center;
 }
@@ -124,13 +170,6 @@ h1 {
     margin-top: 5px;
 }
 
-input {
-    margin: 4px;
-    padding: 6px;
-    border-radius: 6px;
-    border: none;
-}
-
 button {
     padding: 8px 14px;
     margin: 8px;
@@ -141,32 +180,51 @@ button {
     background: #2563eb;
     color: white;
 }
-
-#inputSection {
-    text-align: center;
-    margin-top: 40px;
-}
 </style>
 </head>
 
 <body>
 
-<h1>MPL COMMUNITY DRAFT</h1>
-
-<div id="inputSection">
-    <p>Masukkan 10 Nama</p>
-    <div id="inputs"></div>
-    <button onclick="startDraft()">START TOURNAMENT DRAFT</button>
+<!-- ===== HEADER ===== -->
+<div class="broadcast-header">
+    <div class="event-title">
+        MANGO CUP RAMADHAN SEASON 2
+    </div>
+    <div class="match-info">
+        MATCH 
+        <input type="number" value="13">
+        — BO3 — GAME 
+        <input type="number" value="1">
+    </div>
 </div>
 
-<div id="draftSection" style="display:none;">
+<!-- ===== SCOREBOARD ===== -->
+<div class="scoreboard">
+    <div class="team-name" style="color:#ef4444;">MANGO A</div>
+
+    <div class="score">
+        <button onclick="addScore('A')">+</button>
+        <span id="scoreA">0</span>
+    </div>
+
+    -
+
+    <div class="score">
+        <span id="scoreB">0</span>
+        <button onclick="addScore('B')">+</button>
+    </div>
+
+    <div class="team-name" style="color:#3b82f6;">MANGO B</div>
+</div>
+
+<div id="draftSection">
     <div class="turn" id="turnInfo"></div>
     <div class="timer" id="timer"></div>
 
     <div class="main">
 
         <div class="team teamA" id="teamABox">
-            <h2>TEAM A</h2>
+            <h2>MANGO A</h2>
             <div id="teamA"></div>
         </div>
 
@@ -176,19 +234,34 @@ button {
         </div>
 
         <div class="team teamB" id="teamBBox">
-            <h2>TEAM B</h2>
+            <h2>MANGO B</h2>
             <div id="teamB"></div>
         </div>
 
     </div>
 
     <div style="text-align:center;">
-        <button onclick="resetDraft()">RESET</button>
+        <button onclick="resetDraft()">RESET DRAFT</button>
     </div>
 </div>
 
 <script>
-let players = [];
+let scoreA = 0;
+let scoreB = 0;
+
+function addScore(team){
+    if(team === 'A'){
+        scoreA++;
+        document.getElementById("scoreA").innerText = scoreA;
+    } else {
+        scoreB++;
+        document.getElementById("scoreB").innerText = scoreB;
+    }
+}
+
+/* ===== DRAFT ENGINE ===== */
+
+let players = ["P1","P2","P3","P4","P5","P6","P7","P8","P9","P10"];
 let captains = [];
 let pool = [];
 let teamA = [];
@@ -198,17 +271,6 @@ let pickIndex = 0;
 let timerInterval;
 let timeLeft = 15;
 
-const flipSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-card-flip-1938.mp3");
-const tickSound = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-clock-countdown-bleeps-916.mp3");
-
-function generateInputs() {
-    const container = document.getElementById("inputs");
-    for (let i = 0; i < 10; i++) {
-        container.innerHTML += `<input type="text" id="p${i}" placeholder="Player ${i+1}"><br>`;
-    }
-}
-generateInputs();
-
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -216,24 +278,12 @@ function shuffle(array) {
     }
 }
 
-function startDraft() {
-    players = [];
-    for (let i = 0; i < 10; i++) {
-        let val = document.getElementById("p"+i).value;
-        if (!val) return alert("Isi semua nama dulu.");
-        players.push(val);
-    }
-
+function startDraftAuto() {
     shuffle(players);
-
     captains = [players[0], players[1]];
     teamA = [captains[0]];
     teamB = [captains[1]];
     pool = players.slice(2);
-
-    document.getElementById("inputSection").style.display = "none";
-    document.getElementById("draftSection").style.display = "block";
-
     render();
     startTimer();
 }
@@ -250,12 +300,11 @@ function render() {
 
     if (pickIndex < pickOrder.length) {
         let turn = pickOrder[pickIndex];
-        document.getElementById("turnInfo").innerText = "GILIRAN CAPTAIN TEAM " + turn;
+        document.getElementById("turnInfo").innerText = "TURN: TEAM " + turn;
         if (turn === "A") document.getElementById("teamABox").classList.add("activeA");
         else document.getElementById("teamBBox").classList.add("activeB");
     } else {
         document.getElementById("turnInfo").innerText = "DRAFT COMPLETE";
-        document.getElementById("timer").innerText = "";
         clearInterval(timerInterval);
         return;
     }
@@ -279,17 +328,13 @@ function render() {
 
 function flipCard(card, player) {
     if (pickIndex >= pickOrder.length) return;
-
-    flipSound.play();
     card.classList.add("flip");
 
     setTimeout(() => {
         if (pickOrder[pickIndex] === "A") teamA.push(player);
         else teamB.push(player);
-
         pool = pool.filter(p => p !== player);
         pickIndex++;
-        resetTimer();
         render();
     }, 600);
 }
@@ -300,16 +345,8 @@ function startTimer() {
     timerInterval = setInterval(() => {
         timeLeft--;
         document.getElementById("timer").innerText = timeLeft;
-        tickSound.play();
-        if (timeLeft <= 0) {
-            autoPick();
-        }
+        if (timeLeft <= 0) autoPick();
     }, 1000);
-}
-
-function resetTimer() {
-    clearInterval(timerInterval);
-    startTimer();
 }
 
 function autoPick() {
@@ -328,6 +365,8 @@ function autoPick() {
 function resetDraft() {
     location.reload();
 }
+
+startDraftAuto();
 </script>
 
 </body>
