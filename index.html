@@ -188,60 +188,18 @@ border-radius:10px 10px 0 0;
 }
 
 /* ================= SLIDE ANIMATION ================= */
-/* ===== REVEAL CINEMATIC ===== */
-
-.revealZoom{
-animation:revealZoom .6s ease forwards;
-}
-
-@keyframes revealZoom{
-0%{transform:scale(1);}
-50%{transform:scale(1.15);}
-100%{transform:scale(1.12);}
-}
-
-.cardRevealGlow{
-box-shadow:0 0 40px rgba(255,255,255,0.25);
-transition:.4s ease;
-}
-  .slideLeft{
-animation:slideLeft .9s cubic-bezier(.17,.67,.83,.67) forwards;
-}
-
-.slideRight{
-animation:slideRight .9s cubic-bezier(.17,.67,.83,.67) forwards;
-}
-
 .slideLeft{
-animation:slideLeftMove .9s cubic-bezier(.17,.67,.83,.67) forwards;
-position:relative;
+animation:slideLeft .9s forwards;
 }
-
 .slideRight{
-animation:slideRightMove .9s cubic-bezier(.17,.67,.83,.67) forwards;
-position:relative;
-}
-
-.slideLeft{
-animation:slideLeft .8s cubic-bezier(.17,.67,.83,.67) forwards;
-}
-
-.slideRight{
-animation:slideRight .8s cubic-bezier(.17,.67,.83,.67) forwards;
+animation:slideRight .9s forwards;
 }
 
 @keyframes slideLeft{
-to{
-transform:translateX(-600px);
-opacity:.2;
+to{transform:translateX(-520px) scale(.5);}
 }
-}
-
 @keyframes slideRight{
-to{
-transform:translateX(600px);
-opacity:.2;
-}
+to{transform:translateX(520px) scale(.5);}
 }
 
 /* ================= CAPTAIN REVEAL ================= */
@@ -341,7 +299,6 @@ MATCH <input type="number" value="13">
 
 <script>
 let players=["Ilham","Ifdal","Avi","Abdu","Rafsul","Rehan","Adit","Farug","Torig","Ricat"];
-
 let captains=[];
 let pool=[];
 let teamA=[], teamB=[];
@@ -393,13 +350,11 @@ document.body.appendChild(overlay);
 setTimeout(()=>{
 overlay.remove();
 callback();
-},2800);
+},3000);
 }
 
 function startDraft(){
-pool=players.filter(p=>!captains.includes(p));
-pickIndex=0;
-currentTurn="A";
+pool=players.slice(2);
 render();
 startTimer();
 }
@@ -419,7 +374,6 @@ teamB.map(p=>`
 
 const container=document.getElementById("cardContainer");
 container.innerHTML="";
-
 pool.forEach((player,i)=>{
 const card=document.createElement("div");
 card.className="card";
@@ -431,41 +385,22 @@ card.innerHTML=`
 <div style="font-size:12px">${player}</div>
 </div>
 </div>`;
-
 card.onclick=()=>handleCard(card,player);
 container.appendChild(card);
 });
 }
 
 function handleCard(card,player){
-
-if(card.classList.contains("animating")) return;
-
 if(!card.classList.contains("flip")){
 card.classList.add("flip");
-card.classList.add("animating");
-
-setTimeout(()=>{
-card.classList.add("revealZoom");
-card.classList.add("cardRevealGlow");
-},400);
-
 }else{
-
-clearInterval(timerInterval);
-
-setTimeout(()=>{
-
 if(currentTurn==="A"){
 card.classList.add("slideLeft");
 }else{
 card.classList.add("slideRight");
 }
 
-},700);
-
 setTimeout(()=>{
-
 if(currentTurn==="A"){
 teamA.push(player);
 currentTurn="B";
@@ -473,20 +408,18 @@ currentTurn="B";
 teamB.push(player);
 currentTurn="A";
 }
-
 pool=pool.filter(p=>p!==player);
 pickIndex++;
-
-render();
-
 if(pickIndex>=8){
+render(); // PENTING — update UI dulu
+clearInterval(timerInterval);
 document.getElementById("timer").innerText="00";
 showResetButton();
 }else{
+render();
 startTimer();
 }
-
-},1700);
+},900);
 }
 }
 
@@ -494,27 +427,20 @@ function startTimer(){
 clearInterval(timerInterval);
 timeLeft=45;
 document.getElementById("timer").innerText=timeLeft;
-
 timerInterval=setInterval(()=>{
 timeLeft--;
 document.getElementById("timer").innerText=timeLeft;
-
 if(timeLeft<=0){
 clearInterval(timerInterval);
 }
 },1000);
 }
-
-function showResetButton(){
-const existing=document.getElementById("resetBtn");
-if(existing) return;
-
+  function showResetButton(){
 const btn=document.createElement("button");
-btn.id="resetBtn";
 btn.innerText="RESET DRAFT";
-btn.style.marginTop="30px";
-btn.style.padding="12px 28px";
-btn.style.borderRadius="10px";
+btn.style.marginTop="25px";
+btn.style.padding="12px 24px";
+btn.style.borderRadius="8px";
 btn.style.border="none";
 btn.style.background="#2563eb";
 btn.style.color="white";
@@ -531,8 +457,4 @@ document.querySelector(".main").after(btn);
 
 </body>
 </html>
-
-
-
-
 
