@@ -295,10 +295,7 @@ MATCH <input type="number" value="13">
 
 </div>
 
-<div id="draftComplete">
-<div>DRAFT COMPLETE</div>
-<button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;">RESET</button>
-</div>
+
 
 <script>
 let players=["Ilham","Ifdal","Avi","Abdu","Rafsul","Rehan","Adit","Farug","Torig","Ricat"];
@@ -414,8 +411,10 @@ currentTurn="A";
 pool=pool.filter(p=>p!==player);
 pickIndex++;
 if(pickIndex>=8){
-document.getElementById("draftComplete").style.display="flex";
+render(); // PENTING — update UI dulu
 clearInterval(timerInterval);
+document.getElementById("timer").innerText="00";
+showResetButton();
 }else{
 render();
 startTimer();
@@ -436,7 +435,26 @@ clearInterval(timerInterval);
 }
 },1000);
 }
+  function showResetButton(){
+const btn=document.createElement("button");
+btn.innerText="RESET DRAFT";
+btn.style.marginTop="25px";
+btn.style.padding="12px 24px";
+btn.style.borderRadius="8px";
+btn.style.border="none";
+btn.style.background="#2563eb";
+btn.style.color="white";
+btn.style.cursor="pointer";
+btn.style.display="block";
+btn.style.marginLeft="auto";
+btn.style.marginRight="auto";
+
+btn.onclick=()=>location.reload();
+
+document.querySelector(".main").after(btn);
+}
 </script>
 
 </body>
 </html>
+
