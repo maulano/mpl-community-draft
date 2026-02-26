@@ -6,202 +6,218 @@
 
 <style>
 body{
-    margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:radial-gradient(circle at top,#0f172a,#020617);
-    color:white;
-    overflow:hidden;
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:radial-gradient(circle at top,#0f172a,#020617);
+color:white;
+overflow:hidden;
 }
 
-/* ===== INTRO (NO LEAK FIXED) ===== */
+/* ===== HIDE MAIN UNTIL INTRO DONE ===== */
+#app{
+display:none;
+}
+
+/* ===== INTRO (NO LEAK FIXED TOTAL) ===== */
 #intro{
-    position:fixed;
-    inset:0;
-    background:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    z-index:99999;
-    opacity:0;
-    animation:fadeIn 1.5s forwards;
+position:fixed;
+inset:0;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:99999;
+opacity:0;
+animation:fadeIn 1.5s forwards;
 }
 
 @keyframes fadeIn{to{opacity:1}}
 @keyframes fadeOut{to{opacity:0}}
 
 #intro button{
-    margin-top:20px;
-    padding:10px 20px;
-    background:#2563eb;
-    border:none;
-    color:white;
-    border-radius:8px;
-    cursor:pointer;
+margin-top:20px;
+padding:12px 28px;
+background:#2563eb;
+border:none;
+color:white;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
 }
 
-/* ===== HEADER ===== */
+/* ===== HEADER (DIPERBESAR) ===== */
 .broadcast-header{
-    background:#0b1220;
-    padding:10px 20px;
-    display:flex;
-    justify-content:space-between;
-    border-bottom:1px solid #1f2937;
+background:#0b1220;
+padding:18px 20px;
+display:flex;
+justify-content:space-between;
+border-bottom:1px solid #1f2937;
+font-size:20px;
+font-weight:600;
 }
 
 .match-info input{
-    background:#1f2937;
-    border:none;
-    color:white;
-    width:60px;
-    text-align:center;
-    border-radius:4px;
+background:#1f2937;
+border:none;
+color:white;
+width:70px;
+text-align:center;
+border-radius:4px;
+font-size:16px;
 }
 
-/* ===== SCOREBOARD ===== */
+/* ===== SCOREBOARD (DIPERBESAR) ===== */
 .scoreboard{
-    display:flex;
-    justify-content:center;
-    gap:25px;
-    padding:8px;
-    background:#111827;
+display:flex;
+justify-content:center;
+gap:35px;
+padding:15px;
+background:#111827;
+font-size:20px;
+font-weight:600;
 }
 
 .score button{
-    background:#2563eb;
-    border:none;
-    color:white;
-    border-radius:6px;
-    padding:4px 8px;
-    cursor:pointer;
+background:#2563eb;
+border:none;
+color:white;
+border-radius:6px;
+padding:6px 10px;
+cursor:pointer;
 }
 
 /* ===== MAIN ===== */
 .main{
-    display:flex;
-    height:65vh;
-    justify-content:space-around;
-    align-items:center;
+display:flex;
+height:60vh;
+justify-content:space-around;
+align-items:center;
 }
 
 .team{
-    width:28%;
-    background:#111827;
-    border-radius:14px;
-    padding:15px;
-    min-height:420px;
-    position:relative;
+width:28%;
+background:#111827;
+border-radius:14px;
+padding:15px;
+min-height:420px;
+position:relative;
 }
 
 .teamA h2{color:#ef4444}
 .teamB h2{color:#3b82f6}
 
 .player{
-    background:#1f2937;
-    padding:8px;
-    margin:6px 0;
-    border-radius:8px;
-    text-align:center;
+background:#1f2937;
+padding:8px;
+margin:6px 0;
+border-radius:8px;
+text-align:center;
 }
 
 .captain{
-    border:2px solid gold;
-    color:gold;
+border:2px solid gold;
+color:gold;
 }
 
 /* ===== CARDS ===== */
 .cards{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:12px;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:12px;
 }
 
 .card{
-    width:100px;
-    height:150px;
-    perspective:1000px;
-    cursor:pointer;
-    transition:.4s;
+width:100px;
+height:150px;
+perspective:1000px;
+cursor:pointer;
+transition:.4s;
+position:relative;
 }
 
 .card.zoom{
-    transform:scale(1.6);
-    z-index:500;
+transform:scale(1.6);
+z-index:500;
 }
 
 .card-inner{
-    width:100%;
-    height:100%;
-    transition:transform .6s;
-    transform-style:preserve-3d;
-    position:relative;
+width:100%;
+height:100%;
+transition:transform .6s;
+transform-style:preserve-3d;
+position:relative;
 }
 
 .card.flip .card-inner{
-    transform:rotateY(180deg);
+transform:rotateY(180deg);
 }
 
 .card-front,.card-back{
-    position:absolute;
-    width:100%;
-    height:100%;
-    border-radius:10px;
-    backface-visibility:hidden;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+position:absolute;
+width:100%;
+height:100%;
+border-radius:10px;
+backface-visibility:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
 }
 
 .card-front{
-    background:#1f2937;
-    font-size:28px;
+background:#1f2937;
+font-size:26px;
 }
 
 .card-back{
-    background:#d1d5db; /* LIGHT GREY */
-    transform:rotateY(180deg);
-    flex-direction:column;
-    color:black;
+background:#e5e7eb; /* LIGHT GREY */
+transform:rotateY(180deg);
+flex-direction:column;
+color:black;
 }
 
 .card-back img{
-    width:100%;
-    height:85%;
-    object-fit:cover;
-    border-radius:10px 10px 0 0;
+width:100%;
+height:85%;
+object-fit:cover;
+border-radius:10px 10px 0 0;
 }
 
-/* ===== CAPTAIN REVEAL OVERLAY ===== */
-.revealOverlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.7);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:99998;
+/* ===== SLIDE ANIMATION ===== */
+.slide-left{
+animation:slideLeft .8s forwards;
+}
+.slide-right{
+animation:slideRight .8s forwards;
 }
 
-.revealCard{
-    width:220px;
-    background:white;
-    color:black;
-    border-radius:14px;
-    text-align:center;
-    padding:10px;
-    animation:zoomIn .6s forwards;
+@keyframes slideLeft{
+to{transform:translateX(-500px) scale(.5);}
+}
+@keyframes slideRight{
+to{transform:translateX(500px) scale(.5);}
 }
 
-@keyframes zoomIn{
-    from{transform:scale(.6);opacity:0}
-    to{transform:scale(1);opacity:1}
+/* ===== DRAFT COMPLETE ===== */
+#draftComplete{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.85);
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:9999;
+font-size:40px;
+font-weight:700;
 }
 
+/* ===== TIMER ===== */
 .timer{
-    text-align:center;
-    font-size:28px;
-    margin-top:8px;
+text-align:center;
+font-size:28px;
+margin-top:10px;
 }
 </style>
 </head>
@@ -210,31 +226,33 @@ body{
 
 <!-- INTRO -->
 <div id="intro">
-    <h1>MANGO CUP</h1>
-    <h2>RAMADHAN SEASON 2</h2>
-    <button onclick="startCaptainSequence()">START DRAFT</button>
+<h1 style="font-size:42px;">MANGO CUP</h1>
+<h2 style="font-size:28px;">RAMADHAN SEASON 2</h2>
+<button onclick="startCaptainSequence()">START DRAFT</button>
 </div>
 
+<div id="app">
+
 <div class="broadcast-header">
-    <div>MANGO CUP RAMADHAN SEASON 2</div>
-    <div class="match-info">
-        MATCH <input type="number" value="13">
-        — BO3 — GAME <input type="number" value="1">
-    </div>
+<div>MANGO CUP RAMADHAN SEASON 2</div>
+<div class="match-info">
+MATCH <input type="number" value="13">
+— BO3 — GAME <input type="number" value="1">
+</div>
 </div>
 
 <div class="scoreboard">
-    <div style="color:#ef4444;">MANGO A</div>
-    <div class="score">
-        <button onclick="scoreA++;scoreAEl.innerText=scoreA">+</button>
-        <span id="scoreA">0</span>
-    </div>
-    -
-    <div class="score">
-        <span id="scoreB">0</span>
-        <button onclick="scoreB++;scoreBEl.innerText=scoreB">+</button>
-    </div>
-    <div style="color:#3b82f6;">MANGO B</div>
+<div style="color:#ef4444;">MANGO A</div>
+<div class="score">
+<button onclick="scoreA++;scoreAEl.innerText=scoreA">+</button>
+<span id="scoreA">0</span>
+</div>
+-
+<div class="score">
+<span id="scoreB">0</span>
+<button onclick="scoreB++;scoreBEl.innerText=scoreB">+</button>
+</div>
+<div style="color:#3b82f6;">MANGO B</div>
 </div>
 
 <div class="timer" id="timer"></div>
@@ -243,6 +261,13 @@ body{
 <div class="team teamA"><h2>MANGO A</h2><div id="teamA"></div></div>
 <div><div class="cards" id="cardContainer"></div></div>
 <div class="team teamB"><h2>MANGO B</h2><div id="teamB"></div></div>
+</div>
+
+</div>
+
+<div id="draftComplete">
+<div>DRAFT COMPLETE</div>
+<button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;">RESET</button>
 </div>
 
 <script>
@@ -256,50 +281,18 @@ let pickOrder=["A","B","B","A","A","B","B","A"];
 let pickIndex=0;
 let timeLeft=45,timerInterval;
 
-/* ===== START CAPTAIN SEQUENCE ===== */
+/* ===== INTRO FIX ===== */
 function startCaptainSequence(){
 document.getElementById("intro").style.animation="fadeOut 1s forwards";
 setTimeout(()=>{
 document.getElementById("intro").style.display="none";
+document.getElementById("app").style.display="block";
 shuffle(players);
 captains=[players[0],players[1]];
-showCaptainReveal("MANGO A CAPTAIN",captains[0],()=>{
-slideToTeam("A",captains[0],()=>{
-showCaptainReveal("MANGO B CAPTAIN",captains[1],()=>{
-slideToTeam("B",captains[1],startDraft);
-});
-});
-});
+teamA=[captains[0]];
+teamB=[captains[1]];
+startDraft();
 },1000);
-}
-
-function showCaptainReveal(title,name,callback){
-const overlay=document.createElement("div");
-overlay.className="revealOverlay";
-overlay.innerHTML=`
-<div class="revealCard">
-<h2>${title}</h2>
-<img src="${name.toLowerCase()}.jpg" style="width:100%;border-radius:10px">
-<h3>${name}</h3>
-</div>`;
-document.body.appendChild(overlay);
-setTimeout(()=>{
-overlay.remove();
-callback();
-},2500);
-}
-
-function slideToTeam(team,name,callback){
-if(team==="A") teamA=[name];
-else teamB=[name];
-render();
-setTimeout(callback,800);
-}
-
-function startDraft(){
-pool=players.slice(2);
-render();
-startTimer();
 }
 
 function shuffle(a){
@@ -307,6 +300,12 @@ for(let i=a.length-1;i>0;i--){
 const j=Math.floor(Math.random()*(i+1));
 [a[i],a[j]]=[a[j],a[i]];
 }}
+
+function startDraft(){
+pool=players.slice(2);
+render();
+startTimer();
+}
 
 function render(){
 document.getElementById("teamA").innerHTML=
@@ -338,14 +337,23 @@ card.classList.add("flip");
 card.classList.add("zoom");
 }else{
 card.classList.remove("zoom");
+let team=pickOrder[pickIndex];
+if(team==="A") card.classList.add("slide-left");
+else card.classList.add("slide-right");
+
 setTimeout(()=>{
-if(pickOrder[pickIndex]==="A") teamA.push(player);
+if(team==="A") teamA.push(player);
 else teamB.push(player);
 pool=pool.filter(p=>p!==player);
 pickIndex++;
+if(pickIndex>=pickOrder.length){
+document.getElementById("draftComplete").style.display="flex";
+clearInterval(timerInterval);
+}else{
 render();
 startTimer();
-},600);
+}
+},800);
 }
 }
 
