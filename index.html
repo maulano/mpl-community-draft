@@ -212,11 +212,28 @@ animation:slideLeft .9s cubic-bezier(.17,.67,.83,.67) forwards;
 animation:slideRight .9s cubic-bezier(.17,.67,.83,.67) forwards;
 }
 
-@keyframes slideLeft{
-to{transform:translateX(-520px) scale(.5);}
+.slideLeft{
+animation:slideLeftMove .9s cubic-bezier(.17,.67,.83,.67) forwards;
+position:relative;
 }
-@keyframes slideRight{
-to{transform:translateX(520px) scale(.5);}
+
+.slideRight{
+animation:slideRightMove .9s cubic-bezier(.17,.67,.83,.67) forwards;
+position:relative;
+}
+
+@keyframes slideLeftMove{
+to{
+left:-520px;
+opacity:.3;
+}
+}
+
+@keyframes slideRightMove{
+to{
+left:520px;
+opacity:.3;
+}
 }
 
 /* ================= CAPTAIN REVEAL ================= */
@@ -506,6 +523,7 @@ document.querySelector(".main").after(btn);
 
 </body>
 </html>
+
 
 
 
