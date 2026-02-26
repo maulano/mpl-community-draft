@@ -411,6 +411,7 @@ currentTurn="A";
 pool=pool.filter(p=>p!==player);
 pickIndex++;
 if(pickIndex>=8){
+render(); // PENTING — update UI dulu
 clearInterval(timerInterval);
 document.getElementById("timer").innerText="00";
 showResetButton();
@@ -456,4 +457,5 @@ document.querySelector(".main").after(btn);
 
 </body>
 </html>
+
 
