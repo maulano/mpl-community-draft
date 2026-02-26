@@ -13,12 +13,7 @@ color:white;
 overflow:hidden;
 }
 
-/* ===== HIDE MAIN UNTIL INTRO DONE ===== */
-#app{
-display:none;
-}
-
-/* ===== INTRO (NO LEAK FIXED TOTAL) ===== */
+/* ================= INTRO ================= */
 #intro{
 position:fixed;
 inset:0;
@@ -29,15 +24,16 @@ align-items:center;
 flex-direction:column;
 z-index:99999;
 opacity:0;
-animation:fadeIn 1.5s forwards;
+animation:introFade 1.5s forwards;
 }
 
-@keyframes fadeIn{to{opacity:1}}
-@keyframes fadeOut{to{opacity:0}}
+@keyframes introFade{
+to{opacity:1;}
+}
 
 #intro button{
-margin-top:20px;
-padding:12px 28px;
+margin-top:25px;
+padding:12px 30px;
 background:#2563eb;
 border:none;
 color:white;
@@ -46,14 +42,19 @@ cursor:pointer;
 font-size:16px;
 }
 
-/* ===== HEADER (DIPERBESAR) ===== */
+/* ================= APP HIDDEN ================= */
+#app{
+display:none;
+}
+
+/* ================= HEADER ================= */
 .broadcast-header{
 background:#0b1220;
-padding:18px 20px;
+padding:20px;
 display:flex;
 justify-content:space-between;
 border-bottom:1px solid #1f2937;
-font-size:20px;
+font-size:22px;
 font-weight:600;
 }
 
@@ -67,11 +68,11 @@ border-radius:4px;
 font-size:16px;
 }
 
-/* ===== SCOREBOARD (DIPERBESAR) ===== */
+/* ================= SCOREBOARD ================= */
 .scoreboard{
 display:flex;
 justify-content:center;
-gap:35px;
+gap:40px;
 padding:15px;
 background:#111827;
 font-size:20px;
@@ -87,7 +88,7 @@ padding:6px 10px;
 cursor:pointer;
 }
 
-/* ===== MAIN ===== */
+/* ================= MAIN ================= */
 .main{
 display:flex;
 height:60vh;
@@ -96,31 +97,39 @@ align-items:center;
 }
 
 .team{
-width:28%;
+width:30%;
 background:#111827;
 border-radius:14px;
 padding:15px;
 min-height:420px;
-position:relative;
 }
 
-.teamA h2{color:#ef4444}
-.teamB h2{color:#3b82f6}
+.teamA h2{color:#ef4444;}
+.teamB h2{color:#3b82f6;}
 
 .player{
+display:flex;
+align-items:center;
+gap:8px;
 background:#1f2937;
-padding:8px;
+padding:6px;
 margin:6px 0;
 border-radius:8px;
-text-align:center;
+font-size:14px;
+}
+
+.player img{
+width:35px;
+height:35px;
+border-radius:6px;
+object-fit:cover;
 }
 
 .captain{
 border:2px solid gold;
-color:gold;
 }
 
-/* ===== CARDS ===== */
+/* ================= CARD ================= */
 .cards{
 display:flex;
 flex-wrap:wrap;
@@ -133,13 +142,7 @@ width:100px;
 height:150px;
 perspective:1000px;
 cursor:pointer;
-transition:.4s;
 position:relative;
-}
-
-.card.zoom{
-transform:scale(1.6);
-z-index:500;
 }
 
 .card-inner{
@@ -171,7 +174,7 @@ font-size:26px;
 }
 
 .card-back{
-background:#e5e7eb; /* LIGHT GREY */
+background:#e5e7eb;
 transform:rotateY(180deg);
 flex-direction:column;
 color:black;
@@ -184,22 +187,58 @@ object-fit:cover;
 border-radius:10px 10px 0 0;
 }
 
-/* ===== SLIDE ANIMATION ===== */
-.slide-left{
-animation:slideLeft .8s forwards;
+/* ================= SLIDE ANIMATION ================= */
+.slideLeft{
+animation:slideLeft .9s forwards;
 }
-.slide-right{
-animation:slideRight .8s forwards;
+.slideRight{
+animation:slideRight .9s forwards;
 }
 
 @keyframes slideLeft{
-to{transform:translateX(-500px) scale(.5);}
+to{transform:translateX(-520px) scale(.5);}
 }
 @keyframes slideRight{
-to{transform:translateX(500px) scale(.5);}
+to{transform:translateX(520px) scale(.5);}
 }
 
-/* ===== DRAFT COMPLETE ===== */
+/* ================= CAPTAIN REVEAL ================= */
+.revealOverlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.8);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99998;
+}
+
+.revealCard{
+background:white;
+color:black;
+padding:20px;
+border-radius:14px;
+text-align:center;
+animation:zoomIn .6s forwards;
+}
+
+@keyframes zoomIn{
+from{transform:scale(.6);opacity:0;}
+to{transform:scale(1);opacity:1;}
+}
+
+.revealCard img{
+width:200px;
+border-radius:12px;
+margin:15px 0;
+}
+
+.timer{
+text-align:center;
+font-size:28px;
+margin-top:10px;
+}
+
 #draftComplete{
 position:fixed;
 inset:0;
@@ -208,27 +247,18 @@ display:none;
 justify-content:center;
 align-items:center;
 flex-direction:column;
-z-index:9999;
-font-size:40px;
-font-weight:700;
-}
-
-/* ===== TIMER ===== */
-.timer{
-text-align:center;
-font-size:28px;
-margin-top:10px;
+font-size:42px;
+z-index:99999;
 }
 </style>
 </head>
 
 <body>
 
-<!-- INTRO -->
 <div id="intro">
-<h1 style="font-size:42px;">MANGO CUP</h1>
-<h2 style="font-size:28px;">RAMADHAN SEASON 2</h2>
-<button onclick="startCaptainSequence()">START DRAFT</button>
+<h1 style="font-size:46px;">MANGO CUP</h1>
+<h2 style="font-size:30px;">RAMADHAN SEASON 2</h2>
+<button onclick="startFlow()">START DRAFT</button>
 </div>
 
 <div id="app">
@@ -244,13 +274,13 @@ MATCH <input type="number" value="13">
 <div class="scoreboard">
 <div style="color:#ef4444;">MANGO A</div>
 <div class="score">
-<button onclick="scoreA++;scoreAEl.innerText=scoreA">+</button>
+<button onclick="updateScore('A')">+</button>
 <span id="scoreA">0</span>
 </div>
 -
 <div class="score">
 <span id="scoreB">0</span>
-<button onclick="scoreB++;scoreBEl.innerText=scoreB">+</button>
+<button onclick="updateScore('B')">+</button>
 </div>
 <div style="color:#3b82f6;">MANGO B</div>
 </div>
@@ -271,35 +301,60 @@ MATCH <input type="number" value="13">
 </div>
 
 <script>
-let scoreA=0,scoreB=0;
-let scoreAEl=document.getElementById("scoreA");
-let scoreBEl=document.getElementById("scoreB");
-
 let players=["Ilham","Ifdal","Avi","Abdu","Rafsul","Rehan","Adit","Farug","Torig","Ricat"];
-let captains=[],pool=[],teamA=[],teamB=[];
-let pickOrder=["A","B","B","A","A","B","B","A"];
+let captains=[];
+let pool=[];
+let teamA=[], teamB=[];
 let pickIndex=0;
-let timeLeft=45,timerInterval;
+let currentTurn="A";
+let timerInterval;
+let timeLeft=45;
+let scoreA=0, scoreB=0;
 
-/* ===== INTRO FIX ===== */
-function startCaptainSequence(){
-document.getElementById("intro").style.animation="fadeOut 1s forwards";
-setTimeout(()=>{
-document.getElementById("intro").style.display="none";
-document.getElementById("app").style.display="block";
-shuffle(players);
-captains=[players[0],players[1]];
-teamA=[captains[0]];
-teamB=[captains[1]];
-startDraft();
-},1000);
+function updateScore(team){
+if(team==="A"){scoreA++;document.getElementById("scoreA").innerText=scoreA;}
+else{scoreB++;document.getElementById("scoreB").innerText=scoreB;}
 }
 
 function shuffle(a){
 for(let i=a.length-1;i>0;i--){
 const j=Math.floor(Math.random()*(i+1));
 [a[i],a[j]]=[a[j],a[i]];
-}}
+}
+}
+
+function startFlow(){
+document.getElementById("intro").style.display="none";
+document.getElementById("app").style.display="block";
+
+shuffle(players);
+captains=[players[0],players[1]];
+
+showCaptainReveal("MANGO A CAPTAIN",captains[0],()=>{
+teamA=[captains[0]];
+showCaptainReveal("MANGO B CAPTAIN",captains[1],()=>{
+teamB=[captains[1]];
+startDraft();
+});
+});
+}
+
+function showCaptainReveal(title,name,callback){
+const overlay=document.createElement("div");
+overlay.className="revealOverlay";
+overlay.innerHTML=`
+<div class="revealCard">
+<h2>${title}</h2>
+<img src="${name.toLowerCase()}.jpg">
+<h3>${name}</h3>
+</div>`;
+document.body.appendChild(overlay);
+
+setTimeout(()=>{
+overlay.remove();
+callback();
+},3000);
+}
 
 function startDraft(){
 pool=players.slice(2);
@@ -309,9 +364,16 @@ startTimer();
 
 function render(){
 document.getElementById("teamA").innerHTML=
-teamA.map(p=>`<div class="player captain">${p}</div>`).join("");
+teamA.map(p=>`
+<div class="player">
+<img src="${p.toLowerCase()}.jpg"> | ${p}
+</div>`).join("");
+
 document.getElementById("teamB").innerHTML=
-teamB.map(p=>`<div class="player captain">${p}</div>`).join("");
+teamB.map(p=>`
+<div class="player">
+<img src="${p.toLowerCase()}.jpg"> | ${p}
+</div>`).join("");
 
 const container=document.getElementById("cardContainer");
 container.innerHTML="";
@@ -334,26 +396,31 @@ container.appendChild(card);
 function handleCard(card,player){
 if(!card.classList.contains("flip")){
 card.classList.add("flip");
-card.classList.add("zoom");
 }else{
-card.classList.remove("zoom");
-let team=pickOrder[pickIndex];
-if(team==="A") card.classList.add("slide-left");
-else card.classList.add("slide-right");
+if(currentTurn==="A"){
+card.classList.add("slideLeft");
+}else{
+card.classList.add("slideRight");
+}
 
 setTimeout(()=>{
-if(team==="A") teamA.push(player);
-else teamB.push(player);
+if(currentTurn==="A"){
+teamA.push(player);
+currentTurn="B";
+}else{
+teamB.push(player);
+currentTurn="A";
+}
 pool=pool.filter(p=>p!==player);
 pickIndex++;
-if(pickIndex>=pickOrder.length){
+if(pickIndex>=8){
 document.getElementById("draftComplete").style.display="flex";
 clearInterval(timerInterval);
 }else{
 render();
 startTimer();
 }
-},800);
+},900);
 }
 }
 
@@ -364,7 +431,9 @@ document.getElementById("timer").innerText=timeLeft;
 timerInterval=setInterval(()=>{
 timeLeft--;
 document.getElementById("timer").innerText=timeLeft;
-if(timeLeft<=0) clearInterval(timerInterval);
+if(timeLeft<=0){
+clearInterval(timerInterval);
+}
 },1000);
 }
 </script>
