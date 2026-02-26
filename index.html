@@ -222,17 +222,25 @@ animation:slideRightMove .9s cubic-bezier(.17,.67,.83,.67) forwards;
 position:relative;
 }
 
-@keyframes slideLeftMove{
+.slideLeft{
+animation:slideLeft .8s cubic-bezier(.17,.67,.83,.67) forwards;
+}
+
+.slideRight{
+animation:slideRight .8s cubic-bezier(.17,.67,.83,.67) forwards;
+}
+
+@keyframes slideLeft{
 to{
-left:-520px;
-opacity:.3;
+transform:translateX(-600px);
+opacity:.2;
 }
 }
 
-@keyframes slideRightMove{
+@keyframes slideRight{
 to{
-left:520px;
-opacity:.3;
+transform:translateX(600px);
+opacity:.2;
 }
 }
 
@@ -523,6 +531,7 @@ document.querySelector(".main").after(btn);
 
 </body>
 </html>
+
 
 
 
